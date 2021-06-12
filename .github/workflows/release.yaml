@@ -1,6 +1,9 @@
 name: very_good_app
 
-on: [pull_request, push]
+on:
+  push:
+    tags:
+      - v1.*
 
 jobs:
   build:
@@ -40,11 +43,11 @@ jobs:
           ANDROID_KEYSTORE_PASSWORD: 123456
           ANDROID_KEYSTORE_PATH: key.jks
         run: |
-          flutter build apk --release --flavor staging --target lib/main_staging.dart
+          flutter build apk --release --flavor production --target lib/main_production.dart
 
-      # - name: Create Release
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     artifacts: "build/app/outputs/flutter-apk/*.apk"
-      #     token: ${{ secrets.TOKEN }}
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/flutter-apk/*.apk"
+          token: ${{ secrets.TOKEN }}
 
