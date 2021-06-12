@@ -29,6 +29,17 @@ jobs:
         env:
           SIGNING_KEY: ${{ secrets.ANDROID_KEYSTORE }}
         run: |
-          echo $SIGNING_KEY | base64 -di > file.keystore
+          echo $SIGNING_KEY | base64 -di > android/app/key.jks
           pwd
-          ls
+          ls android/app
+
+      - name: build release
+        env:
+          KEY_ALIAS: upload
+          KEY_PASSWORD: 123456
+          STORE_PASSWORD: 123456
+          STORE_FILE: key.jks
+        run: |
+          flutter build apk --release --flavor production --target lib/main_production.dart
+
+
